@@ -10,7 +10,7 @@ module Footnotes
     # Edit notes
     @@notes = [ :controller, :view, :layout, :partials, :stylesheets, :javascripts ]
     # Show notes
-    @@notes += [ :assigns, :session, :cookies, :params, :filters, :routes, :env, :queries, :log, :general ]
+    @@notes += [ :assigns, :session, :cookies, :params, :filters, :env, :queries, :log, :general ]
 
     # Change queries for rpm note when available
     # if defined?(NewRelic)

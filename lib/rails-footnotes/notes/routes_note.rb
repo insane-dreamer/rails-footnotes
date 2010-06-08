@@ -18,21 +18,20 @@ module Footnotes
 
       protected
         def parse_routes
-          routes_with_name = ActionController::Routing::Routes.named_routes.to_a.flatten
+          routes_with_name = Rails.application.routes.named_routes.to_a.flatten
 
-          return ActionController::Routing::Routes.filtered_routes(:controller => @controller.controller_path).collect do |route|
+          return Rails.application.routes.filtered_routes(:controller => @controller.controller_path).collect do |route|
             # Catch routes name if exists
             i = routes_with_name.index(route)
             name = i ? routes_with_name[i-1].to_s : ''
 
             # Catch segments requirements
             req = {}
-            route.segments.each do |segment|
-              next unless segment.is_a?(ActionController::Routing::DynamicSegment) && segment.regexp
-              req[segment.key.to_sym] = segment.regexp
+            route.conditions[:path_info].each do |segment|
+              req[segment.name.to_sym] = segment.regexp
             end
 
-            [escape(name), route.segments.join, route.requirements.reject{|key,value| key == :controller}.inspect, req.inspect]
+            [escape(name), route.segment_keys.join, route.requirements.reject{|key,value| key == :controller}.inspect, req.inspect]
           end
         end
     end
