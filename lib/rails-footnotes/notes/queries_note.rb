@@ -185,6 +185,5 @@ module Footnotes
 end
 
 ActiveSupport.on_load(:active_record) do
-  p "hello world!"
   Footnotes::Notes::QueriesNote.load
 end
