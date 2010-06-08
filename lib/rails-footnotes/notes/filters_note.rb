@@ -20,8 +20,9 @@ module Footnotes
         # Get controller filter chain
         #
         def parse_filters
-          return @controller.class.filter_chain.collect do |filter|
-            [parse_method(filter.method), filter.type.inspect, controller_filtered_actions(filter).inspect]
+          return @controller.class._process_action_callbacks.collect do |filter|
+            #[parse_method(filter.method), filter.type.inspect, controller_filtered_actions(filter).inspect]
+            ["", filter.kind.inspect, controller_filtered_actions(filter).inspect]
           end
         end
 
@@ -37,7 +38,9 @@ module Footnotes
             #remove conditions (this would call a Proc on the mock_controller)
             filter.options.merge!(:if => nil, :unless => nil) 
 
-            filter.__send__(:should_run_callback?, mock_controller)   
+            (filter.options[:only].nil? && filter.options[:unless].nil?) || 
+              (Array(filter.options[:only]).include?(action)) ||
+              (!Array(filter.options[:except]).include?(action))
           }.map(&:to_sym)
         end
         
