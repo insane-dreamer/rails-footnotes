@@ -16,7 +16,7 @@ if ENABLE_RAILS_FOOTNOTES
   # behavior commenting the after_filter line below and putting it in Your
   # application. Then you can cherrypick in which actions it will appear.
   #
-  class ActionController::Base
+  ActiveSupport.on_load(:action_controller) do
     prepend_before_filter Footnotes::Filter
     after_filter Footnotes::Filter
   end
